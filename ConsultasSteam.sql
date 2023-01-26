@@ -123,3 +123,69 @@ select count(Nombre) as 'Número de juegos', RequiredAge
 from juegos
 group by RequiredAge
 order by RequiredAge asc
+
+--21. Devuelve todos aquellos años en los que haya menos de 300 juegos.
+
+select ReleaseDate, count(*) as njuegos
+from juegos
+group by ReleaseDate
+having count(*)<300
+order by ReleaseDate
+
+--22. Devuelve todos los juegos que estén para Mac pero no para Windows.
+
+select distinct Nombre,PlatformMac,PlatformWindows
+from juegos
+where PlatformMac like '%true%' and PlatformWindows like '%false%'
+
+--23. Devuelve todos los juegos donde su precio final sea mayor a su precio inicial. pregunta
+
+select distinct Nombre,PriceInitial,PriceFinal
+from juegos
+where PriceFinal>PriceInitial
+order by PriceFinal desc
+
+--24. Devuelve todos los juegos que no estén valorados en dólares.
+
+select distinct nombre,PriceCurrency
+from juegos
+where PriceCurrency !='USD'
+
+--25. Devuelve todos los juegos que tengan una mayor nota que 0, pero que hayan suspendido.
+
+select distinct nombre, Metacritic
+from juegos
+where Metacritic between 1 and 49
+order by Metacritic
+
+--26. Devuelve el top 15 de juegos con mayor número de DLC.
+
+select distinct top 15 with ties Nombre,DLCCount
+from juegos
+order by DLCCount desc
+
+--27. Devuelve la información de los juegos que sólo se puedan jugar en Inglés.
+
+select distinct nombre,SupportedLanguages,ShortDescrip
+from juegos
+where left(SupportedLanguages,7)='English'
+
+--28. Devuelve el nombre(en minúscula) y la web (en mayúscula) de los juegos de acción o casuales.
+
+select LOWER(Nombre),UPPER(Website),Genre
+from juegos
+where Genre like '%action%' or Genre like '%casual%'
+
+--29. ¿Cuál es el juego indie con mayor nota?
+
+select distinct top 1 nombre, Genre, Metacritic
+from juegos
+where Genre like '%indie%'
+order by Metacritic desc
+
+--30. ¿Y con menor nota?
+
+select distinct top 1 with ties nombre, Genre, Metacritic
+from juegos
+where Genre like '%indie%' and Metacritic!=0
+order by Metacritic 
